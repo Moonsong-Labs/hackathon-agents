@@ -11,4 +11,4 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-entourage-utils = { git = "ssh://git@github.com/Moonsong-Labs/entourage.git", subdirectory = "entourage-utils" }
+entourage-utils = { git = "ssh://git@github.com/Moonsong-Labs/entourage.git", subdirectory = "entourage-utils", rev = "md/feat/making-it-klusterai-compatible" }
