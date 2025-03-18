@@ -32,7 +32,7 @@ class AssistantRequest(BaseModel):
 class AssistantResponse(BaseModel):
     """A response from the simple assistant."""
     answer: str = Field(description="The answer to the user's question.")
-    score: Optional[str] = Field(
+    score: Optional[int] = Field(
         default=None, 
         description="From 0 to 10 how confident are you in your answer?"
     )
@@ -50,8 +50,9 @@ class SimpleAssistantAgent(ChatAgent):
     def __init__(self):
         super().__init__(
             config=AgentConfig(
-                model="gemini-2.0-flash",
-                provider="google_genai",
+                # provider="ollama", model="PetrosStav/gemma3-tools:12b",
+                provider="google_genai", model="gemini-2.0-flash",
+                # provider="openai", model="gpt-4o-mini",
                 temperature=0.7,
                 prompt_templates={
 ### The system prompt, the input schema and output schema are passed in this init method
@@ -200,13 +201,6 @@ from entourage_utils.graph_streaming import StreamGraphUpdates
 
 ### MAIN ###    
 def main():
-    # Simple configuration - in a real implementation, this might include API keys, etc.
-    config = {
-        "temperature": 0.7,
-        "model": "gpt-4o",
-    }
-    
-    
     logger.info("Simple Assistant Demo\n")
     
     # Example questions to ask
