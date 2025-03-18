@@ -265,7 +265,7 @@ wheels = [
 [[package]]
 name = "entourage-utils"
 version = "0.0.1"
-source = { git = "https://github.com/Moonsong-Labs/entourage.git?subdirectory=entourage-utils&rev=hackathon-template#e2fae2c30dafd9c74bf70a0e79ae7e4c804e1997" }
+source = { git = "ssh://git@github.com/Moonsong-Labs/entourage.git?subdirectory=entourage-utils&rev=md%2Ffeat%2Fmaking-it-klusterai-compatible#55fb715b314cb94d7d522ebe5ef23de96a4b3ebd" }
 dependencies = [
     { name = "genson" },
     { name = "jsonschema" },
@@ -538,7 +538,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "entourage-utils", git = "https://github.com/Moonsong-Labs/entourage.git?subdirectory=entourage-utils&rev=hackathon-template" },
+    { name = "entourage-utils", git = "ssh://git@github.com/Moonsong-Labs/entourage.git?subdirectory=entourage-utils&rev=md%2Ffeat%2Fmaking-it-klusterai-compatible" },
     { name = "ipython", specifier = ">=8.32.0" },
     { name = "langchain-google-genai", specifier = ">=2.0.11" },
 ]
