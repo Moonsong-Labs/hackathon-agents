@@ -7,9 +7,10 @@ This template is a simple exemple on how to use the LangGraph combined with ento
 It is a simple assistant that answers questions directly without external tools
 The graph is a directl flow with 2 nodes and 1 edge:
     START => Initialize => SimpleAssistantAgent => END
-    
+
 See the restaurant_recommender example for a more complex graph.
 """
+
 from entourage_utils.chat_agent import ChatAgent
 from entourage_utils.graph_streaming import StreamGraphUpdates
 from functools import partial
@@ -40,15 +41,16 @@ logger = logging.getLogger(__name__)
 
 class AssistantRequest(BaseModel):
     """A request for the simple assistant."""
+
     question: str = Field(description="The user's question.")
 
 
 class AssistantResponse(BaseModel):
     """A response from the simple assistant."""
+
     answer: str = Field(description="The answer to the user's question.")
     score: Optional[str] = Field(
-        default=None,
-        description="From 0 to 10 how confident are you in your answer?"
+        default=None, description="From 0 to 10 how confident are you in your answer?"
     )
 
 
@@ -61,7 +63,6 @@ class SimpleAssistantAgent(ChatAgent):
     """A simple assistant that answers questions directly without external tools."""
 
     def __init__(self):
-
         # load the key from env variables OPENAI_API_KEY
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
@@ -70,14 +71,18 @@ class SimpleAssistantAgent(ChatAgent):
 
         super().__init__(
             config=AgentConfig(
-                model="klusterai/Meta-Llama-3.3-70B-Instruct-Turbo",
-                provider="openai",
                 base_url="https://api.kluster.ai/v1",
+                # model="klusterai/Meta-Llama-3.3-70B-Instruct-Turbo",
+                model="deepseek-ai/DeepSeek-V3",
+                # model="deepseek-ai/DeepSeek-R1",
+                # base_url="https://api.openai.com/v1",
+                # model="gpt-4o",
+                provider="openai",
                 api_key=api_key,
                 temperature=0.7,
                 prompt_templates={
                     # The system prompt, the input schema and output schema are passed in this init method
-                    "system":  '''You are a helpful assistant that answers questions directly without external tools.
+                    "system": """You are a helpful assistant that answers questions directly without external tools.
 # Input format
 
 You are given information about the current State in the following schema:
@@ -86,9 +91,10 @@ $input_schema
 # Output format
 
 The output format should have the following schema:
-$output_schema''',
+$output_schema
+DO NOT USE CODE FENCES UNDER ANY CIRCUMSTANCES - ONLY PROVIDE THE RAW JSON RESPONSE. USE " AND NOT ' FOR KEYS AND STRINGS.""",
                     # The user prompt, the input is passed when invoked in the answer_question method
-                    "user": '''$input'''
+                    "user": """$input""",
                 },
             ),
             input_schema=AssistantRequest,
@@ -96,7 +102,9 @@ $output_schema''',
         )
 
     # Invokes the LLM model with the user's question and returns the answer directly
-    def answer_question(self, request: AssistantRequest, store: BaseStore) -> AssistantResponse:
+    def answer_question(
+        self, request: AssistantRequest, store: BaseStore
+    ) -> AssistantResponse:
         return self.invoke_with_chat_history(
             input=request.question,
             store=store,
@@ -107,6 +115,7 @@ $output_schema''',
 ### STATE DEFINITION, MUTABLE THROUGHOUT THE GRAPH EXECUTION ###
 class State(BaseModel):
     """A state of the system, the class is mutable throughout the graph execution."""
+
     request: AssistantRequest
     response: Optional[AssistantResponse] = None
 
@@ -128,12 +137,14 @@ class GraphConfig(BaseModel):
 # Initialize the state. Will be called everytime the graph is executed.
 # Not doing anything in our case but could be used to maintain the progress of the graph if needed.
 
+
 def initialize(
     state: State,
     config: RunnableConfig,
     store: BaseStore,
 ) -> State:
     return state
+
 
 # Declare the simple assistant node. Tells the graph to execute the simple assistant agent.
 
@@ -144,7 +155,6 @@ def simple_assistant(
     store: BaseStore,
     agent: SimpleAssistantAgent,
 ) -> State:
-
     output: AssistantResponse = agent.answer_question(
         request=state.request, store=store
     )
@@ -191,7 +201,7 @@ def get_graph(config: GraphConfig) -> CompiledGraph:
         Node(
             simple_assistant,
             agent=simple_assistant_agent,
-        )
+        ),
     ]
     for node in nodes:
         graph.add_node(node.name, node.node)
@@ -214,6 +224,7 @@ def get_graph(config: GraphConfig) -> CompiledGraph:
 
 
 ### MAIN ###
+
 
 def main():
     # Simple configuration - in a real implementation, this might include API keys, etc.
