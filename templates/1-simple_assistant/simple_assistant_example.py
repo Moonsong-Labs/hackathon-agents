@@ -184,8 +184,7 @@ def get_graph(config: GraphConfig) -> CompiledGraph:
                 node = partial(func, **kwargs)
             else:
                 node = func
-            self.node = self.print_log_when_executing(
-                func=node, name=self.name)
+            self.node = self.print_log_when_executing(func=node, name=self.name)
 
     # The nodes of the graph. In this case, it is a direct flow, no conditional edges or parallel nodes...
     nodes = [
@@ -232,13 +231,14 @@ def main():
         run_config={
             "configurable": {"thread_id": 102},
             "recursion_limit": 500,
-        },)
-    )(initial_state=initial_state)
+        },
+    )(intent="???")
+    # )(initial_state=initial_state)
 
     print("-" * 80)
 
-        print("\nDemo complete!")
+    print("\nDemo complete!")
 
 
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main()
