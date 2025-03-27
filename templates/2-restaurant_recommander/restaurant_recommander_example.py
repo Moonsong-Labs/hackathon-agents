@@ -10,7 +10,7 @@ load_dotenv()
 
 from restaurant_agent.graph import GraphConfig, get_graph
 from restaurant_agent.config import GraphConfig
-from entourage_utils import json_utils
+from entourage_poc import json_utils
 from restaurant_agent import config
 run_config = config.DEFAULT_RUN_CONFIG
 
@@ -24,7 +24,7 @@ def main():
     display(Image(graph.get_graph().draw_mermaid_png()))
 
     from restaurant_agent.state import Request, State
-    from entourage_utils.graph_streaming import StreamGraphUpdates
+    from entourage_poc.graph_streaming import StreamGraphUpdates
 
     request = Request(
         cuisine="asian",

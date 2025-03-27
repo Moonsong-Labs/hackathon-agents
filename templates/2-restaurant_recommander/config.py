@@ -1,7 +1,7 @@
 import os
 from typing import Any, Dict, List
-from entourage_utils.agent import AgentConfig
-from entourage_utils import prompt_utils
+from entourage_poc.agents.agent import AgentConfig
+from entourage_poc import prompt_utils
 from pydantic import BaseModel
 
 
@@ -40,7 +40,7 @@ class GraphConfig(BaseModel):
 
     prompt_versions: Dict[str, str] = {agent_id: "v1" for agent_id in agent_names}
 
-    agent_configs: Dict[str,AgentConfig] = None
+    agent_configs: Dict[str, AgentConfig] = None
 
     max_retry_iterations: int = 5
 
@@ -56,4 +56,3 @@ class GraphConfig(BaseModel):
             for agent_name in self.agent_names
         }
         return self
-    

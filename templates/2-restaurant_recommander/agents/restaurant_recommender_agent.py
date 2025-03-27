@@ -6,9 +6,8 @@ from pydantic import BaseModel, Field
 from langgraph.store.base import BaseStore
 from restaurant_agent.state import Request, Restaurant
 
-
-from entourage_utils.chat_agent import ChatAgent, LLMOutputValidationError
-from entourage_utils import json_utils
+from entourage_poc.agents.chat_agent import ChatAgent, LLMOutputValidationError
+from entourage_poc import json_utils
 
 from langchain_community.tools.tavily_search import TavilySearchResults
 
@@ -33,7 +32,9 @@ class WebSearchQuery(BaseModel):
 class RestaurantRecommendation(BaseModel):
     restaurant: Optional[Restaurant]
 
-    justification: Optional[str] = Field(description="The justification for the recommendation.")
+    justification: Optional[str] = Field(
+        description="The justification for the recommendation."
+    )
 
     error: Optional[str] = Field(description="The error message if any.")
 
@@ -49,7 +50,7 @@ class RestaurantRecommenderAgent(ChatAgent):
         super().__init__(
             config=config,
             input_schema=RestaurantRecommenderInput,
-            output_schema=RestaurantRecommenderOutput
+            output_schema=RestaurantRecommenderOutput,
         )
 
         self.tavily_search_tool = TavilySearchResults()
@@ -69,7 +70,9 @@ class RestaurantRecommenderAgent(ChatAgent):
         if isinstance(input, WebResults):
             if isinstance(output, WebSearchQuery):
                 raise LLMOutputValidationError(
-                    f"Expected RestaurantRecommendation output, but got WebSearchQuery output: {output}"
+                    f"Expected RestaurantRecommendation output, but got WebSearchQuery output: {
+                        output
+                    }"
                 )
 
         if isinstance(output, WebSearchQuery):

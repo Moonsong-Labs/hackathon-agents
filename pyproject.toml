@@ -5,11 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "entourage-utils",
+  "entourage-poc",
   "ipython>=8.32.0",
   "langchain-google-genai>=2.0.11",
   "langchain-ollama>=0.2.3",
 ]
 
 [tool.uv.sources]
-entourage-utils = { git = "ssh://git@github.com/Moonsong-Labs/entourage.git", subdirectory = "entourage-utils", branch = "crystalin/upgrade-langcore"}
+entourage-poc = { git = "ssh://git@github.com/Moonsong-Labs/entourage.git", subdirectory = "entourage-poc", rev = "md/feat/add-crystallin-and-kluster-support" }

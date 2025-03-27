@@ -2,7 +2,7 @@ from typing import Optional
 from langgraph.store.base import BaseStore
 from pydantic import BaseModel
 from restaurant_agent.state import Reflection, Request, Restaurant
-from entourage_utils.chat_agent import ChatAgent
+from entourage_poc.agents.chat_agent import ChatAgent
 
 
 class ReflectionInput(BaseModel):
@@ -22,9 +22,7 @@ class ReflectionAgent(ChatAgent):
 
     def __init__(self, config):
         super().__init__(
-            config=config,
-            input_schema=ReflectionInput,
-            output_schema=Reflection
+            config=config, input_schema=ReflectionInput, output_schema=Reflection
         )
 
     def reflect(self, input: ReflectionInput, store: BaseStore) -> Reflection:
