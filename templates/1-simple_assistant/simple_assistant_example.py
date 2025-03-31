@@ -23,6 +23,7 @@ from langgraph.graph.graph import CompiledGraph
 from langchain_core.runnables import RunnableConfig
 from langgraph.store.base import BaseStore
 from entourage_poc.agents.agent import AgentConfig
+from entourage_poc.entities.intent import Intent
 import logging
 import os
 from dotenv import load_dotenv
@@ -68,10 +69,11 @@ class SimpleAssistantAgent(ChatAgent):
                 # provider="ollama", model="PetrosStav/gemma3-tools:12b",
                 # provider="google_genai",
                 # model="gemini-2.0-flash",
-                # provider="openai", model="gpt-4o-mini",
                 provider="openai",
-                model="deepseek-ai/DeepSeek-V3",
-                base_url="https://api.kluster.ai/v1",
+                model="gpt-4o-mini",
+                # provider="openai",
+                # model="deepseek-ai/DeepSeek-V3",
+                # base_url="https://api.kluster.ai/v1",
                 temperature=0.7,
                 prompt_templates={
                     # The system prompt, the input schema and output schema are passed in this init method
@@ -184,7 +186,8 @@ def get_graph(config: GraphConfig) -> CompiledGraph:
                 node = partial(func, **kwargs)
             else:
                 node = func
-            self.node = self.print_log_when_executing(func=node, name=self.name)
+            self.node = self.print_log_when_executing(
+                func=node, name=self.name)
 
     # The nodes of the graph. In this case, it is a direct flow, no conditional edges or parallel nodes...
     nodes = [
@@ -225,6 +228,9 @@ def main():
         question="What's the difference between classical and quantum computing?"
     )
     initial_state = State(request=request)
+    user_query = "What's the difference between classical and quantum computing?"
+    intent = Intent(query=user_query)
+
     events = StreamGraphUpdates(
         graph=get_graph(GraphConfig()),
         verbosity_level=0,
@@ -232,7 +238,7 @@ def main():
             "configurable": {"thread_id": 102},
             "recursion_limit": 500,
         },
-    )(intent="???")
+    )(intent=intent)
     # )(initial_state=initial_state)
 
     print("-" * 80)
