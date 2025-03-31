@@ -5,11 +5,14 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "entourage-utils",
   "ipython>=8.32.0",
   "langchain-google-genai>=2.0.11",
   "langchain-ollama>=0.2.3",
 ]
 
-[tool.uv.sources]
-entourage-utils = { git = "ssh://git@github.com/Moonsong-Labs/entourage.git", subdirectory = "entourage-utils", branch = "crystalin/upgrade-langcore"}
+[tool.poetry]
+packages = [{ include = "entourage_utils", from = "." }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
